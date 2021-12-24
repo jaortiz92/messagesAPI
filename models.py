@@ -7,6 +7,7 @@ from pydantic import BaseModel
 class Person(BaseModel):
     first_name: str
     last_name: str
+    emil: str
     age: int
     hair_color: Optional[str] = None
     is_married: Optional[bool] = None
