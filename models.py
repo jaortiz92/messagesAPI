@@ -1,6 +1,8 @@
 from typing import Optional
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, HttpUrl, EmailStr
+
 from enum import Enum
+from datetime import date
 
 # Models
 
@@ -24,14 +26,19 @@ class Person(BaseModel):
         min_length=1,
         max_length=50
     )
-    email: str = Field(
+    email: EmailStr = Field(
         ...,
-        regex=".+@.+\..+",
     )
     age: int = Field(
         ...,
         ge=18,
         le=100,
+    )
+    website: Optional[HttpUrl] = Field(
+        default=None
+    )
+    birth_date: Optional[date] = Field(
+        default=None
     )
     hair_color: Optional[HairColor] = Field(
         default=None,
@@ -42,6 +49,18 @@ class Person(BaseModel):
 
 
 class Location(BaseModel):
-    city: str
-    state: str
-    country: str
+    city: str = Field(
+        ...,
+        min_length=1,
+        max_length=50
+    )
+    state: str = Field(
+        ...,
+        min_length=1,
+        max_length=50
+    )
+    country: str = Field(
+        ...,
+        min_length=1,
+        max_length=50
+    )
