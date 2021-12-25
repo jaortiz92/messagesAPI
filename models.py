@@ -3,6 +3,7 @@ from pydantic import BaseModel, Field, HttpUrl, EmailStr
 
 from enum import Enum
 from datetime import date
+from test_models import schema_person, schema_location
 
 # Models
 
@@ -47,6 +48,9 @@ class Person(BaseModel):
         default=None,
     )
 
+    class Config:
+        schema_extra = schema_person
+
 
 class Location(BaseModel):
     city: str = Field(
@@ -64,3 +68,6 @@ class Location(BaseModel):
         min_length=1,
         max_length=50
     )
+
+    class Config:
+        schema_extra = schema_location
