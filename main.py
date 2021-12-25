@@ -1,7 +1,8 @@
 from typing import Optional
 from fastapi import FastAPI
 from fastapi import Body, Query, Path
-from models import Person
+from pydantic.types import PositiveFloat
+from models import Person, Location
 
 app = FastAPI()
 
@@ -54,3 +55,19 @@ def show_person(
     )
 ):
     return {person_id: "It exists!"}
+
+
+@app.put("/person/{person_id}")
+def update_person(
+    person_id: int = Path(
+        ...,
+        gt=0,
+        title="Person ID",
+        description="This is the person ID. It's greater than 0. It's required."
+    ),
+    person: Person = Body(...),
+    location: Location = Body(...)
+):
+    results = person.dict()
+    results.update(location.dict())
+    return {person_id: results}
