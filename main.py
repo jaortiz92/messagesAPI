@@ -25,20 +25,23 @@ def show_person(
         min_length=1,
         max_length=50,
         title="Person name",
-        description="This is the person name. It's between 1 and 50 characers."
+        description="This is the person name. It's between 1 and 50 characers.",
+        example="Juan"
     ),
     email: str = Query(
         ...,
         regex=".+@.+\..+",
         title="Person email",
-        description="This is the email. It's required"
+        description="This is the email. It's required",
+        example="juan@hotmail.com"
     ),
     age: Optional[int] = Query(
         None,
         ge=18,
         le=100,
         title="Person age",
-        description="This is the person ege, It's between 18 and 100 years"
+        description="This is the person ege, It's between 18 and 100 years",
+        example=26
     )
 ):
     return {"email": email,
@@ -51,7 +54,8 @@ def show_person(
         ...,
         gt=0,
         title="Person ID",
-        description="This is the person ID. It's greater than 0. It's required."
+        description="This is the person ID. It's greater than 0. It's required.",
+        example=12
     )
 ):
     return {person_id: "It exists!"}
@@ -63,7 +67,8 @@ def update_person(
         ...,
         gt=0,
         title="Person ID",
-        description="This is the person ID. It's greater than 0. It's required."
+        description="This is the person ID. It's greater than 0. It's required.",
+        example=12
     ),
     person: Person = Body(...),
     location: Location = Body(...)
