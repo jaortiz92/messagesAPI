@@ -1,5 +1,5 @@
 from typing import Optional
-from pydantic import BaseModel, Field, HttpUrl, EmailStr
+from pydantic import BaseModel, Field, HttpUrl, EmailStr, SecretStr
 
 from enum import Enum
 from datetime import date
@@ -16,7 +16,7 @@ class HairColor(Enum):
     red = "red"
 
 
-class Person(BaseModel):
+class PersonBase(BaseModel):
     first_name: str = Field(
         ...,
         min_length=1,
@@ -48,8 +48,19 @@ class Person(BaseModel):
         default=None,
     )
 
+
+class Person(PersonBase):
+    password: SecretStr = Field(
+        ...,
+        min_length=8
+    )
+
     class Config:
         schema_extra = schema_person
+
+
+class PersonOut(PersonBase):
+    pass
 
 
 class Location(BaseModel):

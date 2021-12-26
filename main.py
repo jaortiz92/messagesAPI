@@ -2,7 +2,7 @@ from typing import Optional
 from fastapi import FastAPI
 from fastapi import Body, Query, Path
 from pydantic.types import PositiveFloat
-from models import Person, Location
+from models import Person, Location, PersonOut
 
 app = FastAPI()
 
@@ -12,7 +12,7 @@ def home():
     return {"Hello": "World"}
 
 
-@app.post("/person/new")
+@app.post("/person/new", response_model=PersonOut)
 def create_person(person: Person = Body(...)):
     # (...) parameter need
     return person

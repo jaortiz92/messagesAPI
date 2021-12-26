@@ -3,6 +3,7 @@ schema_person = {
         "first_name": "Carlos",
         "last_name": "Perez",
         "email": "carlospere@example.com",
+        "password": "12345678",
         "age": 19,
         "website": "http://www.carlos.com",
         "birth_date": "1990-12-25",
