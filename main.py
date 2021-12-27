@@ -1,10 +1,11 @@
 from typing import Optional
 from fastapi import FastAPI
-from fastapi import Body, Query, Path
+from fastapi import Body, Query, Path, Form
 from fastapi import status
 from pydantic.types import PositiveFloat
-from starlette.status import HTTP_201_CREATED
-from models import Person, Location, PersonOut
+from starlette.status import HTTP_200_OK, HTTP_201_CREATED
+from models import Person, Location, PersonOut, LoginOut
+
 
 app = FastAPI()
 
@@ -93,3 +94,13 @@ def update_person(
     results = person.dict()
     results.update(location.dict())
     return {person_id: results}
+
+
+@app.post(
+    path="/login",
+    response_model=LoginOut,
+    status_code=status.HTTP_200_OK
+)
+def login(username: str = Form(...), password: str = Form(...)):
+    loginOut = LoginOut(username=username)
+    return loginOut

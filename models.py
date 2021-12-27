@@ -3,7 +3,7 @@ from pydantic import BaseModel, Field, HttpUrl, EmailStr, SecretStr
 
 from enum import Enum
 from datetime import date
-from test_models import schema_person, schema_location
+from test_models import schema_person, schema_location, schema_loginOut
 
 # Models
 
@@ -82,3 +82,11 @@ class Location(BaseModel):
 
     class Config:
         schema_extra = schema_location
+
+
+class LoginOut(BaseModel):
+    username: str = Field(..., max_length=20)
+    message: str = Field(default='Login Succesfully!')
+
+    class Config:
+        schema_extra = schema_loginOut

@@ -19,3 +19,9 @@ schema_location = {
         "country": "Colombia"
     }
 }
+
+schema_loginOut = {
+    "example": {
+        "username": "juan1234"
+    }
+}
