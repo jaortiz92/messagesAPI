@@ -1,10 +1,16 @@
+# Python
 from typing import Optional
+
+# FastApi
 from fastapi import FastAPI
 from fastapi import Body, Query, Path, Form, Header, Cookie, UploadFile, File
 from fastapi import status
+from fastapi import HTTPException
+
+# Pydantic
 from pydantic.networks import EmailStr
-from pydantic.types import PositiveFloat
-from starlette.status import HTTP_200_OK, HTTP_201_CREATED
+
+# Models
 from models import Person, Location, PersonOut, LoginOut
 
 
@@ -62,6 +68,9 @@ def show_person(
             name: age}
 
 
+persons = [1, 2, 3, 4, 5]
+
+
 @app.get(
     path="/person/detail/{person_id}",
     status_code=status.HTTP_200_OK
@@ -75,6 +84,11 @@ def show_person(
         example=12
     )
 ):
+    if person_id not in persons:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="¡This person doesn't exist!"
+        )
     return {person_id: "It exists!"}
 
 
