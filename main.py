@@ -19,7 +19,8 @@ app = FastAPI()
 
 @app.get(
     path="/",
-    status_code=status.HTTP_200_OK
+    status_code=status.HTTP_200_OK,
+    tags=["Others"]
 )
 def home():
     return {"Hello": "World"}
@@ -28,7 +29,8 @@ def home():
 @app.post(
     path="/person/new",
     response_model=PersonOut,
-    status_code=status.HTTP_201_CREATED
+    status_code=status.HTTP_201_CREATED,
+    tags=["Person"]
 )
 def create_person(person: Person = Body(...)):
     # (...) parameter need
@@ -37,7 +39,8 @@ def create_person(person: Person = Body(...)):
 
 @app.get(
     path="/person/detail",
-    status_code=status.HTTP_200_OK
+    status_code=status.HTTP_200_OK,
+    tags=["Person"]
 )
 def show_person(
     name: Optional[str] = Query(
@@ -73,7 +76,8 @@ persons = [1, 2, 3, 4, 5]
 
 @app.get(
     path="/person/detail/{person_id}",
-    status_code=status.HTTP_200_OK
+    status_code=status.HTTP_200_OK,
+    tags=["Person"]
 )
 def show_person(
     person_id: int = Path(
@@ -94,7 +98,9 @@ def show_person(
 
 @app.put(
     path="/person/{person_id}",
-    status_code=status.HTTP_200_OK)
+    status_code=status.HTTP_200_OK,
+    tags=["Person"]
+)
 def update_person(
     person_id: int = Path(
         ...,
@@ -114,7 +120,8 @@ def update_person(
 @app.post(
     path="/login",
     response_model=LoginOut,
-    status_code=status.HTTP_200_OK
+    status_code=status.HTTP_200_OK,
+    tags=["Person"]
 )
 def login(username: str = Form(...), password: str = Form(...)):
     loginOut = LoginOut(username=username)
@@ -123,7 +130,8 @@ def login(username: str = Form(...), password: str = Form(...)):
 
 @app.post(
     path="/contact",
-    status_code=status.HTTP_200_OK
+    status_code=status.HTTP_200_OK,
+    tags=["Others"]
 )
 def contact(
     first_name: str = Form(
@@ -149,6 +157,7 @@ def contact(
 
 @app.post(
     path="/post-image",
+    tags=["Posts"]
 )
 def post_image(
     image: UploadFile = File(...)
