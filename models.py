@@ -1,6 +1,6 @@
 # Base
 from uuid import UUID
-from datetime import date
+from datetime import date, datetime
 from typing import List, Optional
 
 # Pydantic
@@ -38,4 +38,16 @@ class UserLogin(BaseUser):
 
 
 class Message(BaseModel):
-    pass
+    message_id: UUID = Field(...)
+    content: str = Field(
+        ...,
+        min_length=1,
+        max_length=256
+    )
+    create_at: datetime = Field(
+        default=datetime.now()
+    )
+    update_at: Optional[datetime] = Field(
+        default=None
+    )
+    by: User = Field(...)
