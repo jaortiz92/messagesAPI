@@ -1,7 +1,7 @@
 # Python
 from uuid import UUID
-from datetime import date, datetime
-from typing import List, Optional
+from datetime import date
+from typing import Optional
 
 # Pydantic
 from pydantic import BaseModel, EmailStr
@@ -35,19 +35,3 @@ class UserLogin(BaseUser):
         min_length=8,
         max_length=256
     )
-
-
-class Message(BaseModel):
-    message_id: UUID = Field(...)
-    content: str = Field(
-        ...,
-        min_length=1,
-        max_length=256
-    )
-    create_at: datetime = Field(
-        default=datetime.now()
-    )
-    update_at: Optional[datetime] = Field(
-        default=None
-    )
-    by: User = Field(...)
