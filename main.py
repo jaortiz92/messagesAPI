@@ -14,12 +14,6 @@ app = FastAPI()
 # Path Operations
 
 
-@app.get(
-    path="/"
-)
-def home():
-    return {"Message API": "Working!!!"}
-
 # Users
 
 
@@ -28,7 +22,7 @@ def home():
     response_model=User,
     status_code=status.HTTP_201_CREATED,
     summary="Register a User",
-    tag=["User"]
+    tags=["User"]
 )
 def signup():
     pass
@@ -39,7 +33,7 @@ def signup():
     response_model=User,
     status_code=status.HTTP_200_OK,
     summary="Login a User",
-    tag=["User"]
+    tags=["User"]
 )
 def login():
     pass
@@ -50,7 +44,7 @@ def login():
     response_model=List[User],
     status_code=status.HTTP_200_OK,
     summary="Show all Users",
-    tag=["User"]
+    tags=["User"]
 )
 def show_all_users():
     pass
@@ -61,7 +55,7 @@ def show_all_users():
     response_model=User,
     status_code=status.HTTP_200_OK,
     summary="Show a User",
-    tag=["User"]
+    tags=["User"]
 )
 def show_a_user():
     pass
@@ -72,7 +66,7 @@ def show_a_user():
     response_model=User,
     status_code=status.HTTP_200_OK,
     summary="Delete a User",
-    tag=["User"]
+    tags=["User"]
 )
 def delete_a_user():
     pass
@@ -83,7 +77,69 @@ def delete_a_user():
     response_model=User,
     status_code=status.HTTP_200_OK,
     summary="Update a User",
-    tag=["User"]
+    tags=["User"]
 )
 def update_a_user():
+    pass
+
+# Message
+
+
+@app.get(
+    path="/",
+    response_model=List[Message],
+    status_code=status.HTTP_200_OK,
+    summary="Show all Messages",
+    tags=["Message"]
+
+)
+def show_all_messages():
+    return {"Message API": "Working!!!"}
+
+
+@app.post(
+    path="/post",
+    response_model=Message,
+    status_code=status.HTTP_201_CREATED,
+    summary="Create a Message",
+    tags=["Message"]
+
+)
+def create_a_message():
+    pass
+
+
+@app.get(
+    path="/messages/{message_id}",
+    response_model=Message,
+    status_code=status.HTTP_200_OK,
+    summary="Show a Message",
+    tags=["Message"]
+
+)
+def show_a_message():
+    pass
+
+
+@app.delete(
+    path="/messages/{mesage_id}/delete",
+    response_model=Message,
+    status_code=status.HTTP_200_OK,
+    summary="Delete a Message",
+    tags=["Message"]
+
+)
+def delete_a_message():
+    pass
+
+
+@app.put(
+    path="/",
+    response_model=Message,
+    status_code=status.HTTP_200_OK,
+    summary="Update all Messages",
+    tags=["Message"]
+
+)
+def update_a_message():
     pass
