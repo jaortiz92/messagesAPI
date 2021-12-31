@@ -16,4 +16,4 @@ class User(Base):
     last_name = Column(String)
     birth_date = Column(Date)
 
-    messages = relationship("Items", back_populates="user")
+    messages = relationship("Message", back_populates="user")

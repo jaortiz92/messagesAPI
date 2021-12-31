@@ -10,17 +10,6 @@ Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
 
-# Dependency
-
-
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
-
-
 # Path Operations
 app.include_router(user_routes.user)
 app.include_router(message_routes.message)

@@ -4,9 +4,27 @@ from typing import List
 # FastApi
 from fastapi import APIRouter
 from fastapi import status
+from fastapi import Depends, HTTPException
+from fastapi import Body
 
-# Schemas
-from schemas import User
+# SQLalchemy
+from sqlalchemy.orm import Session
+
+# App
+from schemas import User, UserRegister
+from config import SessionLocal
+import services
+
+# Dependency
+
+
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
+
 
 # Users
 user = APIRouter(
@@ -21,7 +39,10 @@ user = APIRouter(
     status_code=status.HTTP_201_CREATED,
     summary="Register a User",
 )
-def signup():
+def signup(
+    user: UserRegister = Body(...),
+    db: Session = Depends(get_db)
+):
     """
     Signup
 
@@ -38,7 +59,15 @@ def signup():
     - last_name: str
     - birth_date: str
     """
-    pass
+    db_user = services.user.get_user_by_email(db, user.email)
+    if db_user:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Email already registered"
+        )
+    user.user_id = str(user.user_id)
+
+    return services.user.create_user(db, user)
 
 
 @user.post(
