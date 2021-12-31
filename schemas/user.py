@@ -6,11 +6,23 @@ from typing import Optional
 # Pydantic
 from pydantic import BaseModel, EmailStr
 from pydantic import Field
+from pydantic.fields import ModelField
 
 
 class BaseUser(BaseModel):
     user_id: UUID = Field(...)
     email: EmailStr = Field(...)
+
+    class Config:
+        orm_mode = True
+
+
+class PasswordUser(BaseModel):
+    password: str = Field(
+        ...,
+        min_length=8,
+        max_length=256
+    )
 
 
 class User(BaseUser):
@@ -29,9 +41,9 @@ class User(BaseUser):
     )
 
 
-class UserLogin(BaseUser):
-    password: str = Field(
-        ...,
-        min_length=8,
-        max_length=256
-    )
+class UserLogin(PasswordUser, BaseUser):
+    pass
+
+
+class UserRegister(PasswordUser, User):
+    pass

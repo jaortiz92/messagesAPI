@@ -25,3 +25,6 @@ class Message(BaseModel):
         default=None
     )
     by: User = Field(...)
+
+    class Config:
+        orm_mode = True

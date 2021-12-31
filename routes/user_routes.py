@@ -22,6 +22,22 @@ user = APIRouter(
     summary="Register a User",
 )
 def signup():
+    """
+    Signup
+
+    This path operation register a user in the app
+
+    Parameters:
+    - Register body parameter
+        - user: UserRegister
+
+    Returns a json with the basic user information:
+    - user_id: UUID
+    - email: str
+    - first_name: str
+    - last_name: str
+    - birth_date: str
+    """
     pass
 
 
