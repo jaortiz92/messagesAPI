@@ -1,5 +1,5 @@
 # Python
-from uuid import UUID
+from uuid import UUID, uuid1
 from datetime import datetime
 from typing import Optional
 
@@ -11,20 +11,37 @@ from pydantic import Field
 from .user import User
 
 
-class Message(BaseModel):
+class BaseMessage(BaseModel):
     message_id: UUID = Field(...)
     content: str = Field(
         ...,
         min_length=1,
         max_length=256
     )
-    create_at: datetime = Field(
-        default=datetime.now()
+    create_at: Optional[datetime] = Field(
+        default=None
     )
     update_at: Optional[datetime] = Field(
         default=None
     )
-    by: User = Field(...)
 
     class Config:
         orm_mode = True
+
+
+class Message(BaseMessage):
+    user: User = Field(...)
+
+
+class MessageCreate(BaseMessage):
+    message_id: Optional[UUID] = Field(default=uuid1())
+    create_at: Optional[datetime] = Field(
+        default=datetime.now()
+    )
+    user_id: str = Field(...)
+
+
+class MessageUpdate(BaseMessage):
+    update_at: Optional[datetime] = Field(
+        default=datetime.now()
+    )

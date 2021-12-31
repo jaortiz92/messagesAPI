@@ -6,7 +6,6 @@ from typing import Optional
 # Pydantic
 from pydantic import BaseModel, EmailStr
 from pydantic import Field
-from pydantic.fields import ModelField
 
 
 class BaseUser(BaseModel):

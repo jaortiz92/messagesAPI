@@ -15,9 +15,8 @@ from schemas import User, UserRegister
 from config import SessionLocal
 import services
 
+
 # Dependency
-
-
 def get_db():
     db = SessionLocal()
     try:

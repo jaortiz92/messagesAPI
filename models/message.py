@@ -10,6 +10,7 @@ class Message(Base):
     __tablename__ = "messages"
 
     message_id = Column(String, primary_key=True, index=True)
+    content = Column(String)
     create_at = Column(DateTime)
     update_at = Column(DateTime)
 
