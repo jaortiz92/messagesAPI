@@ -1,5 +1,6 @@
 # Python
 from typing import List
+from uuid import uuid1
 
 # FastApi
 from fastapi import APIRouter
@@ -58,15 +59,15 @@ def signup(
     - last_name: str
     - birth_date: str
     """
-    db_user = services.user.get_user_by_email(db, user.email)
+    db_user = services.get_user_by_email(db, user.email)
     if db_user:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Email already registered"
         )
-    user.user_id = str(user.user_id)
+    user.user_id = str(uuid1())
 
-    return services.user.create_user(db, user)
+    return services.create_user(db, user)
 
 
 @user.post(

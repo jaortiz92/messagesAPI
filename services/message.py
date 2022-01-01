@@ -13,6 +13,10 @@ def get_message_by_user(db: Session, user_id: str):
     return db.query(models.Message).filter(models.Message.user_id == user_id)
 
 
+def get_messages(db: Session, skip: int = 0, limit: int = 100):
+    return db.query(models.Message).offset(skip).limit(limit).all()
+
+
 def create_message(db: Session, message: schemas.MessageCreate):
     db_message = models.Message(**message.dict())
     db_user = services.get_user(db, message.user_id)

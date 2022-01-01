@@ -1,5 +1,5 @@
 # Python
-from uuid import UUID, uuid1
+from uuid import UUID
 from datetime import datetime
 from typing import Optional
 
@@ -34,7 +34,7 @@ class Message(BaseMessage):
 
 
 class MessageCreate(BaseMessage):
-    message_id: Optional[UUID] = Field(default=uuid1())
+    message_id: Optional[UUID] = Field(default=None)
     create_at: Optional[datetime] = Field(
         default=datetime.now()
     )

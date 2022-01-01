@@ -1,5 +1,5 @@
 # Python
-from uuid import UUID, uuid1
+from uuid import UUID
 from datetime import date
 from typing import Optional
 
@@ -45,4 +45,4 @@ class UserLogin(PasswordUser, BaseUser):
 
 
 class UserRegister(PasswordUser, User):
-    user_id: Optional[UUID] = Field(default=uuid1())
+    user_id: Optional[UUID] = Field(default=None)
