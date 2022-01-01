@@ -6,7 +6,7 @@ from uuid import uuid1
 from fastapi import APIRouter
 from fastapi import status
 from fastapi import Depends, HTTPException
-from fastapi import Body
+from fastapi import Body, Path
 
 # SQLalchemy
 from sqlalchemy.orm import Session
@@ -46,7 +46,7 @@ def signup(
     """
     Signup
 
-    This path operation register a user in the app
+    This path operation register an user in the app
 
     Parameters:
     - Register body parameter
@@ -90,7 +90,7 @@ def show_all_users(db: Session = Depends(get_db)):
     """
     Show All Users
 
-    This path operation show all users  in the app
+    This path operation show all users in the app
 
     Parameters:
     -
@@ -111,8 +111,26 @@ def show_all_users(db: Session = Depends(get_db)):
     status_code=status.HTTP_200_OK,
     summary="Show a User",
 )
-def show_a_user():
-    pass
+def show_a_user(
+    user_id: str = Path(...),
+    db: Session = Depends(get_db)
+):
+    """
+    Show a user
+
+    This path operation show an user in the app
+
+    Parameters:
+    - user_id: UUID
+
+    Returns a json with an users in the app, with the following keys
+    - user_id: UUID
+    - email: str
+    - first_name: str
+    - last_name: str
+    - birth_date: str
+    """
+    return services.get_user(db, user_id)
 
 
 @user.delete(
