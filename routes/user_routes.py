@@ -33,6 +33,13 @@ user = APIRouter(
 )
 
 
+def user_not_exist():
+    raise HTTPException(
+        status_code=status.HTTP_400_BAD_REQUEST,
+        detail="user_id does not exist"
+    )
+
+
 @user.post(
     path="/signup",
     response_model=User,
@@ -112,7 +119,7 @@ def show_all_users(db: Session = Depends(get_db)):
     summary="Show a User",
 )
 def show_a_user(
-    user_id: str = Path(...),
+    user_id: str = Path(..., min_length=30),
     db: Session = Depends(get_db)
 ):
     """
@@ -130,17 +137,35 @@ def show_a_user(
     - last_name: str
     - birth_date: str
     """
-    return services.get_user(db, user_id)
+    response = services.get_user(db, user_id)
+    if not response:
+        user_not_exist()
+    return response
 
 
 @user.delete(
     path="/{user_id}/delete",
-    response_model=User,
     status_code=status.HTTP_200_OK,
     summary="Delete a User",
 )
-def delete_a_user():
-    pass
+def delete_a_user(
+    user_id: str = Path(..., min_length=30),
+    db: Session = Depends(get_db)
+):
+    """
+    Delete a User
+
+    This path operation delete a user
+
+    Parameters:
+    - user_id: UUID
+
+    Return a json with information about deletion
+    """
+    response = services.delete_user(db, user_id)
+    if not response:
+        user_not_exist()
+    return {'detail': response}
 
 
 @user.put(

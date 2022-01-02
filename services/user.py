@@ -26,9 +26,11 @@ def create_user(db: Session, user: schemas.UserRegister):
 def delete_user(db: Session, user_id: str):
     db_user = db.query(models.User).filter(
         models.User.user_id == user_id).first()
-    db.delete(db_user)
-    db.commit()
-    return f"User {db_user.email} deleted"
+    if db_user:
+        db.delete(db_user)
+        db.commit()
+        return f"User {db_user.email} deleted"
+    return None
 
 
 def update_user(db: Session, user: schemas.User):
