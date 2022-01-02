@@ -167,7 +167,7 @@ def delete_a_user(
     response = services.delete_user(db, str(user_id))
     if not response:
         user_not_exist()
-    return {'detail': response}
+    return {"detail": response}
 
 
 @user.put(

@@ -38,7 +38,7 @@ class MessageCreate(BaseMessage):
     create_at: Optional[datetime] = Field(
         default=datetime.now()
     )
-    user_id: str = Field(...)
+    user_id: UUID = Field(...)
 
 
 class MessageUpdate(BaseMessage):

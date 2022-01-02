@@ -6,14 +6,14 @@ from uuid import UUID, uuid1
 from fastapi import APIRouter
 from fastapi import status
 from fastapi import Depends, HTTPException
-from fastapi import Body
-from fastapi.param_functions import Path
+from fastapi import Body, Path
 from sqlalchemy.orm.session import Session
 
-# Schemas
+# App
 from schemas import Message, MessageCreate
 from config import SessionLocal
 import services
+from routes.user_routes import user_not_exist
 
 
 # Dependency
@@ -95,7 +95,10 @@ def create_a_message(
     """
     message.message_id = str(uuid1())
     message.user_id = str(message.user_id)
-    return services.message.create_message(db, message)
+    response = services.message.create_message(db, message)
+    if not response:
+        user_not_exist()
+    return response
 
 
 @message.get(
@@ -124,20 +127,36 @@ def show_a_message(
     - update_at: datetame
     - user: User
     """
-    db_message = services.get_message(db, str(message_id))
-    if not db_message:
+    response = services.get_message(db, str(message_id))
+    if not response:
         message_not_exist()
-    return db_message
+    return response
 
 
 @message.delete(
     path="/{message_id}/delete",
-    response_model=Message,
     status_code=status.HTTP_200_OK,
     summary="Delete a Message",
 )
-def delete_a_message():
-    pass
+def delete_a_message(
+    message_id: UUID = Path(...),
+    db: Session = Depends(get_db)
+):
+    """
+    Delete a Message
+
+    This path operation delete a message
+
+    Parameters:
+    - Register path parameter
+        - message_id: UUID
+
+    Return a json with information about deletion
+    """
+    response = services.delete_message(db, str(message_id))
+    if not response:
+        message_not_exist()
+    return {"detail": response}
 
 
 @message.put(

@@ -6,10 +6,10 @@ import schemas
 
 
 def get_message(db: Session, message_id: str):
-    response = db.query(models.Message).filter(
+    db_message = db.query(models.Message).filter(
         models.Message.message_id == message_id).first()
-    if response:
-        return response
+    if db_message:
+        return db_message
     return None
 
 
@@ -36,9 +36,11 @@ def create_message(db: Session, message: schemas.MessageCreate):
 def delete_message(db: Session, message_id: str):
     db_message = db.query(models.Message).filter(
         models.Message.message_id == message_id).first()
-    db.delete(db_message)
-    db.commit()
-    return f"User {db_message.content} deleted"
+    if db_message:
+        db.delete(db_message)
+        db.commit()
+        return f"Message '{db_message.content}' deleted"
+    return None
 
 
 def update_message(db: Session, message: schemas.MessageUpdate):
