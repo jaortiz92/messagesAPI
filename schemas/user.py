@@ -40,9 +40,5 @@ class User(BaseUser):
     )
 
 
-class UserLogin(PasswordUser, BaseUser):
-    pass
-
-
 class UserRegister(PasswordUser, User):
     user_id: Optional[UUID] = Field(default=None)

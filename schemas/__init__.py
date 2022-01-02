@@ -1,2 +1,2 @@
-from .user import User, UserLogin, UserRegister
+from .user import User, UserRegister
 from .message import Message, MessageCreate, MessageUpdate

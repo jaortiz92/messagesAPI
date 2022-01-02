@@ -6,7 +6,8 @@ from uuid import UUID, uuid1
 from fastapi import APIRouter
 from fastapi import status
 from fastapi import Depends, HTTPException
-from fastapi import Body, Path
+from fastapi import Body, Path, Form
+from pydantic.networks import EmailStr
 
 # SQLalchemy
 from sqlalchemy.orm import Session
@@ -83,8 +84,35 @@ def signup(
     status_code=status.HTTP_200_OK,
     summary="Login a User",
 )
-def login():
-    pass
+def login(
+    email: EmailStr = Form(...),
+    password: str = Form(...),
+    db: Session = Depends(get_db)
+):
+    """
+    Login
+
+    This path operation login an user in the app
+
+    Parameters:
+    - Request form parameters:
+        - email: EmailStr
+        - password: str
+
+    Returns a json with the basic user information:
+    - user_id: UUID
+    - email: str
+    - first_name: str
+    - last_name: str
+    - birth_date: str
+    """
+    response = services.get_user_by_email(db, email)
+    if not response or response.password != password:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Email or password are not correct"
+        )
+    return response
 
 
 @user.get(
