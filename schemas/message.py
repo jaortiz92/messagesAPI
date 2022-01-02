@@ -18,12 +18,6 @@ class BaseMessage(BaseModel):
         min_length=1,
         max_length=256
     )
-    create_at: Optional[datetime] = Field(
-        default=None
-    )
-    update_at: Optional[datetime] = Field(
-        default=None
-    )
 
     class Config:
         orm_mode = True
@@ -31,17 +25,23 @@ class BaseMessage(BaseModel):
 
 class Message(BaseMessage):
     user: User = Field(...)
+    create_at: Optional[datetime] = Field(
+        default=None
+    )
+    update_at: Optional[datetime] = Field(
+        default=None
+    )
 
 
 class MessageCreate(BaseMessage):
     message_id: Optional[UUID] = Field(default=None)
     create_at: Optional[datetime] = Field(
-        default=datetime.now()
+        default=None
     )
     user_id: UUID = Field(...)
 
 
 class MessageUpdate(BaseMessage):
     update_at: Optional[datetime] = Field(
-        default=datetime.now()
+        default=None
     )

@@ -156,7 +156,7 @@ def delete_a_user(
     """
     Delete a User
 
-    This path operation delete a user
+    This path operation delete an user
 
     Parameters:
     - Register path parameter
@@ -183,7 +183,7 @@ def update_a_user(
     """
     Update a User
 
-    This path operation delete a user
+    This path operation update an user
 
     Parameters
     - Register body parameter

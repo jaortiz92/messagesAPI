@@ -1,4 +1,5 @@
 # Python
+from datetime import datetime
 from typing import List
 from uuid import UUID, uuid1
 
@@ -12,6 +13,7 @@ from sqlalchemy.orm.session import Session
 # App
 from schemas import Message, MessageCreate
 from config import SessionLocal
+from schemas.message import MessageUpdate
 import services
 from routes.user_routes import user_not_exist
 
@@ -95,6 +97,7 @@ def create_a_message(
     """
     message.message_id = str(uuid1())
     message.user_id = str(message.user_id)
+    message.create_at = datetime.now()
     response = services.message.create_message(db, message)
     if not response:
         user_not_exist()
@@ -165,5 +168,29 @@ def delete_a_message(
     status_code=status.HTTP_200_OK,
     summary="Update all Messages",
 )
-def update_a_message():
-    pass
+def update_a_message(
+    message: MessageUpdate = Body(...),
+    db: Session = Depends(get_db)
+):
+    """
+    Update a Message
+
+    This path operation update a message
+
+    Parameters
+    - Register body parameter
+        - message: messageUpdate
+
+    Returns a json with a message in the app, with the following keys
+    - message_id: UUID
+    - content: str
+    - create_at: datetame
+    - update_at: datetame
+    - user: User
+    """
+    message.message_id = str(message.message_id)
+    message.update_at = datetime.now()
+    response = services.update_message(db, message)
+    if not response:
+        message_not_exist()
+    return response

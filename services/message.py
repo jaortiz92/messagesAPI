@@ -1,5 +1,6 @@
+# Python
 from sqlalchemy.orm import Session
-from sqlalchemy.sql.functions import mode, user
+# App
 import models
 import services
 import schemas
@@ -34,8 +35,7 @@ def create_message(db: Session, message: schemas.MessageCreate):
 
 
 def delete_message(db: Session, message_id: str):
-    db_message = db.query(models.Message).filter(
-        models.Message.message_id == message_id).first()
+    db_message = get_message(db, message_id)
     if db_message:
         db.delete(db_message)
         db.commit()
@@ -44,7 +44,10 @@ def delete_message(db: Session, message_id: str):
 
 
 def update_message(db: Session, message: schemas.MessageUpdate):
-    db.query(models.Message).filter(
-        models.Message.message_id == message.message_id).update(**message.dict())
-    db.commit()
-    return get_message(db, message.message_id)
+    db_message = db.query(models.Message).filter(
+        models.Message.message_id == message.message_id)
+    if db_message:
+        db_message.update(message.dict())
+        db.commit()
+        return get_message(db, message.message_id)
+    return None
