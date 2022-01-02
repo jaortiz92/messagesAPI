@@ -1,12 +1,13 @@
 # Python
 from typing import List
-from uuid import uuid1
+from uuid import UUID, uuid1
 
 # FastApi
 from fastapi import APIRouter
 from fastapi import status
 from fastapi import Depends, HTTPException
 from fastapi import Body
+from fastapi.param_functions import Path
 from sqlalchemy.orm.session import Session
 
 # Schemas
@@ -29,6 +30,13 @@ message = APIRouter(
     prefix="/messages",
     tags=["Message"],
 )
+
+
+def message_not_exist():
+    raise HTTPException(
+        status_code=status.HTTP_400_BAD_REQUEST,
+        detail="message_id does not exist"
+    )
 
 
 @message.get(
@@ -83,10 +91,8 @@ def create_a_message(
     - content: str
     - create_at: datetame
     - update_at: datetame
-    - user_id: str
-    - user: str
+    - user: User
     """
-
     message.message_id = str(uuid1())
     message.user_id = str(message.user_id)
     return services.message.create_message(db, message)
@@ -98,12 +104,34 @@ def create_a_message(
     status_code=status.HTTP_200_OK,
     summary="Show a Message",
 )
-def show_a_message():
-    pass
+def show_a_message(
+    message_id: UUID = Path(...),
+    db: Session = Depends(get_db)
+):
+    """
+    Show a message
+
+    This path operation show a message in the app
+
+    Parameters:
+    - Register path parameter
+        - message_id: UUID
+
+    Returns a json with a message in the app, with the following keys
+    - message_id: UUID
+    - content: str
+    - create_at: datetame
+    - update_at: datetame
+    - user: User
+    """
+    db_message = services.get_message(db, str(message_id))
+    if not db_message:
+        message_not_exist()
+    return db_message
 
 
 @message.delete(
-    path="/{mesage_id}/delete",
+    path="/{message_id}/delete",
     response_model=Message,
     status_code=status.HTTP_200_OK,
     summary="Delete a Message",
@@ -113,7 +141,7 @@ def delete_a_message():
 
 
 @message.put(
-    path="/",
+    path="/update",
     response_model=Message,
     status_code=status.HTTP_200_OK,
     summary="Update all Messages",

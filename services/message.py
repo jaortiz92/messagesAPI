@@ -6,7 +6,11 @@ import schemas
 
 
 def get_message(db: Session, message_id: str):
-    return db.query(models.Message).filter(models.Message.message_id == message_id).first()
+    response = db.query(models.Message).filter(
+        models.Message.message_id == message_id).first()
+    if response:
+        return response
+    return None
 
 
 def get_message_by_user(db: Session, user_id: str):
@@ -39,6 +43,6 @@ def delete_message(db: Session, message_id: str):
 
 def update_message(db: Session, message: schemas.MessageUpdate):
     db.query(models.Message).filter(
-        models.Message.message_id == message.message_id).update(**user)
-    db.commit
+        models.Message.message_id == message.message_id).update(**message.dict())
+    db.commit()
     return get_message(db, message.message_id)
