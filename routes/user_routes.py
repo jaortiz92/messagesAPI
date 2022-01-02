@@ -1,6 +1,6 @@
 # Python
 from typing import List
-from uuid import uuid1
+from uuid import UUID, uuid1
 
 # FastApi
 from fastapi import APIRouter
@@ -119,7 +119,7 @@ def show_all_users(db: Session = Depends(get_db)):
     summary="Show a User",
 )
 def show_a_user(
-    user_id: str = Path(..., min_length=30),
+    user_id: UUID = Path(...),
     db: Session = Depends(get_db)
 ):
     """
@@ -128,7 +128,8 @@ def show_a_user(
     This path operation show an user in the app
 
     Parameters:
-    - user_id: UUID
+    - Register path parameter
+        - user_id: UUID
 
     Returns a json with an users in the app, with the following keys
     - user_id: UUID
@@ -137,7 +138,7 @@ def show_a_user(
     - last_name: str
     - birth_date: str
     """
-    response = services.get_user(db, user_id)
+    response = services.get_user(db, str(user_id))
     if not response:
         user_not_exist()
     return response
@@ -149,7 +150,7 @@ def show_a_user(
     summary="Delete a User",
 )
 def delete_a_user(
-    user_id: str = Path(..., min_length=30),
+    user_id: UUID = Path(...),
     db: Session = Depends(get_db)
 ):
     """
@@ -158,21 +159,45 @@ def delete_a_user(
     This path operation delete a user
 
     Parameters:
-    - user_id: UUID
+    - Register path parameter
+        - user_id: UUID
 
     Return a json with information about deletion
     """
-    response = services.delete_user(db, user_id)
+    response = services.delete_user(db, str(user_id))
     if not response:
         user_not_exist()
     return {'detail': response}
 
 
 @user.put(
-    path="/{user_id}/update",
+    path="/update",
     response_model=User,
     status_code=status.HTTP_200_OK,
     summary="Update a User",
 )
-def update_a_user():
-    pass
+def update_a_user(
+    user: User = Body(...),
+    db: Session = Depends(get_db)
+):
+    """
+    Update a User
+
+    This path operation delete a user
+
+    Parameters
+    - Register body parameter
+        - user: User
+
+    Returns a json with the basic user information:
+    - user_id: UUID
+    - email: str
+    - first_name: str
+    - last_name: str
+    - birth_date: str
+    """
+    user.user_id = str(user.user_id)
+    response = services.update_user(db, user)
+    if not response:
+        user_not_exist()
+    return response

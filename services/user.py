@@ -34,7 +34,10 @@ def delete_user(db: Session, user_id: str):
 
 
 def update_user(db: Session, user: schemas.User):
-    db.query(models.User).filter(
-        models.User.user_id == user.user_id).update(**user)
-    db.commit
-    return get_user(db, user.user_id)
+    db_user = db.query(models.User).filter(
+        models.User.user_id == user.user_id)
+    if db_user:
+        db_user.update(user.dict())
+        db.commit()
+        return get_user(db, user.user_id)
+    return None
